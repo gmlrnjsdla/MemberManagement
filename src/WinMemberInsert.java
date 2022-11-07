@@ -208,9 +208,9 @@ public class WinMemberInsert extends JDialog {
 		JButton btnCalendar = new JButton("Calendar..");
 		btnCalendar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WinCalendar dialog = new WinCalendar();
-				dialog.setVisible(true);
-				
+				WinCalendar calendar = new WinCalendar();
+				calendar.setModal(true);
+				calendar.setVisible(true);
 			}
 		});
 		btnCalendar.setBounds(212, 215, 95, 22);

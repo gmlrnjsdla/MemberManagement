@@ -136,6 +136,8 @@ public class WinCalendar extends JDialog {
 			contentPanel.add(panel, BorderLayout.NORTH);
 			{
 				cbYear = new JComboBox();
+				cbYear.setEditable(true);
+				
 				
 				for(int i = 1922; i<=2100; i++) {
 					cbYear.addItem(i);
@@ -252,7 +254,7 @@ public class WinCalendar extends JDialog {
 			}
 			{
 				cbMonth = new JComboBox();
-				
+				cbMonth.setEditable(true);
 				
 				for(int i = 1; i<=12; i++) {
 					cbMonth.addItem(i);
