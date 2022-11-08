@@ -86,7 +86,7 @@ public class WinMain extends JDialog {
 					JMenuItem mnDelete = new JMenuItem("회원 탈퇴...");
 					mnDelete.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							WinDelete delete = new WinDelete();
+							WinDelete delete = new WinDelete(uId);
 							delete.setModal(true);
 							delete.setVisible(true);
 						}

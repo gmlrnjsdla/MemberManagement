@@ -30,7 +30,7 @@ public class WinDelete extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public WinDelete() {
+	public WinDelete(String uId) {
 		setTitle("회원 탈퇴");
 		setBounds(100, 100, 333, 170);
 		getContentPane().setLayout(new BorderLayout());
@@ -52,7 +52,8 @@ public class WinDelete extends JDialog {
 			contentPanel.add(lblNewLabel_1);
 		}
 		{
-			tfId = new JTextField();
+			tfId = new JTextField(uId);
+			tfId.setEnabled(false);
 			tfId.setColumns(10);
 			tfId.setBounds(137, 22, 116, 21);
 			contentPanel.add(tfId);
@@ -76,7 +77,7 @@ public class WinDelete extends JDialog {
 							
 							String sql = "SELECT pw FROM membertbl WHERE id=?";
 							PreparedStatement pstmt = conn.prepareStatement(sql);
-							pstmt.setString(1, id);
+							pstmt.setString(1, uId);
 							ResultSet rs = pstmt.executeQuery();
 							
 							if(rs.next()) {
@@ -87,7 +88,7 @@ public class WinDelete extends JDialog {
 										sql = "DELETE FROM membertbl WHERE id=?";
 										
 										PreparedStatement pstmt1 = conn.prepareStatement(sql);
-										pstmt1.setString(1, id);
+										pstmt1.setString(1, uId);
 										
 										pstmt1.executeUpdate();
 										JOptionPane.showMessageDialog(null, "삭제되었습니다.");
