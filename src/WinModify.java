@@ -25,14 +25,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.mysql.cj.protocol.Resultset;
-
-
+import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JPasswordField;
 
-public class WinMemberInsert extends JDialog {
+public class WinModify extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField tfId;
@@ -49,9 +48,9 @@ public class WinMemberInsert extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public WinMemberInsert() {
-		setTitle("회원가입");
-		setBounds(100, 100, 364, 507);
+	public WinModify(String uId, String uPw, String uName, String uTel, String uBirth) {
+		setTitle("회원정보 수정");
+		setBounds(100, 100, 364, 365);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -62,7 +61,8 @@ public class WinMemberInsert extends JDialog {
 		lblNewLabel.setBounds(12, 26, 57, 15);
 		contentPanel.add(lblNewLabel);
 		
-		tfId = new JTextField();
+		tfId = new JTextField(uId);
+		tfId.setEnabled(false);
 		tfId.setBounds(81, 23, 116, 21);
 		contentPanel.add(tfId);
 		tfId.setColumns(10);
@@ -77,8 +77,7 @@ public class WinMemberInsert extends JDialog {
 		lblNewLabel_2.setBounds(12, 122, 57, 15);
 		contentPanel.add(lblNewLabel_2);
 		
-		tfName = new JTextField();
-		tfName.setEnabled(false);
+		tfName = new JTextField(uName);
 		tfName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -96,8 +95,7 @@ public class WinMemberInsert extends JDialog {
 		lblNewLabel_3.setBounds(12, 170, 57, 15);
 		contentPanel.add(lblNewLabel_3);
 		
-		tfTel = new JTextField();
-		tfTel.setEnabled(false);
+		tfTel = new JTextField(uTel);
 		
 		
 		tfTel.addKeyListener(new KeyAdapter() {
@@ -117,92 +115,10 @@ public class WinMemberInsert extends JDialog {
 		lblNewLabel_4.setBounds(12, 218, 57, 15);
 		contentPanel.add(lblNewLabel_4);
 		
-		tfBirth = new JTextField();
-		tfBirth.setEnabled(false);
+		tfBirth = new JTextField(uBirth);
 		tfBirth.setColumns(10);
 		tfBirth.setBounds(81, 215, 116, 21);
 		contentPanel.add(tfBirth);
-		
-		JLabel lblNewLabel_5 = new JLabel("사진");
-		lblNewLabel_5.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_5.setBounds(12, 266, 57, 15);
-		contentPanel.add(lblNewLabel_5);
-		
-		JLabel lblpic = new JLabel("");
-		lblpic.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2) {
-					JFileChooser chooser = new JFileChooser();
-					FileNameExtensionFilter filter = new FileNameExtensionFilter("이미지 파일", "jpg","png","gif");
-					chooser.addChoosableFileFilter(filter);
-					int ret = chooser.showOpenDialog(null);
-					
-					if(ret == JFileChooser.APPROVE_OPTION) {
-						filePath = chooser.getSelectedFile().getPath();
-						filePath = filePath.replaceAll("\\\\", "/");
-						ImageIcon image = new ImageIcon(filePath);
-						Image img = image.getImage();
-						img = img.getScaledInstance(120, 150, Image.SCALE_SMOOTH);
-						ImageIcon pic = new ImageIcon(img);
-						lblpic.setIcon(pic);
-						
-					}
-				}
-				
-			}
-		});
-		lblpic.setToolTipText("더블클릭 후 선택");
-		lblpic.setBackground(new Color(255, 255, 255));
-		lblpic.setOpaque(true);
-		lblpic.setBounds(81, 269, 120, 150);
-		
-		contentPanel.add(lblpic);
-		
-		JButton btnNewButton = new JButton("중복확인");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					ResultSet rs = null;
-					PreparedStatement pstmt = null;
-					String id = tfId.getText();
-					
-					Class.forName("com.mysql.cj.jdbc.Driver");
-					Connection conn = DriverManager.getConnection
-							("jdbc:mysql://localhost:3306/sqldb", "root","1234");
-					
-					String sql = "SELECT id FROM membertbl WHERE id=?";
-					pstmt = conn.prepareStatement(sql);
-					pstmt.setString(1, id);
-					rs = pstmt.executeQuery();
-					
-					if(rs.next()) {
-						String dbid = rs.getString("id");
-						if(dbid.equals(id));{
-							JOptionPane.showMessageDialog(null, "중복된 아이디!");
-							tfId.requestFocus();
-							tfId.setSelectionStart(0);
-							tfId.setSelectionEnd(tfId.getText().length()); //아이디 블럭치기
-							}
-						
-					}else {
-						JOptionPane.showMessageDialog(null, "사용가능한 아이디!");
-						tfPw.setEnabled(true);
-						tfName.setEnabled(true);
-						tfTel.setEnabled(true);
-						tfBirth.setEnabled(true);
-						tfPw.requestFocus();
-					}
-					
-					
-					} catch (Exception e1) {
-					e1.printStackTrace();
-					}
-				
-			}
-		});
-		btnNewButton.setBounds(212, 23, 95, 22);
-		contentPanel.add(btnNewButton);
 		
 		JButton btnCalendar = new JButton("Calendar..");
 		btnCalendar.addActionListener(new ActionListener() {
@@ -215,8 +131,7 @@ public class WinMemberInsert extends JDialog {
 		btnCalendar.setBounds(212, 215, 95, 22);
 		contentPanel.add(btnCalendar);
 		
-		tfPw = new JPasswordField();
-		tfPw.setEnabled(false);
+		tfPw = new JPasswordField(uPw);
 		tfPw.setBounds(81, 71, 116, 21);
 		contentPanel.add(tfPw);
 		{
@@ -224,7 +139,7 @@ public class WinMemberInsert extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnJoin = new JButton("회원가입");
+				JButton btnJoin = new JButton("수정 완료");
 				btnJoin.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
@@ -232,29 +147,23 @@ public class WinMemberInsert extends JDialog {
 							Connection conn = DriverManager.getConnection
 									("jdbc:mysql://localhost:3306/sqldb", "root","1234");
 							
-							String id = tfId.getText();
 							String pw = tfPw.getText();
 							String name = tfName.getText();
 							String tel = tfTel.getText().replaceAll("-", "");
 							String birth = tfBirth.getText();
 							
+							String sql = "UPDATE membertbl SET pw=?, name=?, tel=?, birth=? WHERE id=?"; 
 							
+							PreparedStatement pstmt = conn.prepareStatement(sql);
+							pstmt.setString(1, pw);
+							pstmt.setString(2, name);
+							pstmt.setString(3, tel);
+							pstmt.setString(4, birth);
+							pstmt.setString(5, uId);
 							
-							Statement stmt = conn.createStatement();
-							String sql = "INSERT INTO membertbl(id,pw,name,tel,birth,pic)"
-									+ " VALUES('"+id+"','"+pw+"','"+name+"','"+tel+"','"+birth+"','"+filePath+"')";
-							
-							
-							if(stmt.executeUpdate(sql) > 0) {
-								JOptionPane.showMessageDialog(null, "회원가입 성공!");
-								setVisible(false);
-								Win_login login = new Win_login();
-								
-								login.setVisible(true);
-							}
-							else {
-								JOptionPane.showMessageDialog(null, "회원가입 실패!");
-							}
+							pstmt.executeUpdate();
+							JOptionPane.showMessageDialog(null, "회원정보수정 성공");
+							setVisible(false);
 							
 							
 							} catch (Exception e1) {
