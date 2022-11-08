@@ -241,8 +241,8 @@ public class WinMemberInsert extends JDialog {
 							
 							
 							Statement stmt = conn.createStatement();
-							String sql = "INSERT INTO membertbl(id,pw,name,tel,birth,pic)"
-									+ " VALUES('"+id+"','"+pw+"','"+name+"','"+tel+"','"+birth+"','"+filePath+"')";
+							String sql = "INSERT INTO membertbl(id,pw,name,tel,birth,pic,joindate)"
+									+ " VALUES('"+id+"','"+pw+"','"+name+"','"+tel+"','"+birth+"','"+filePath+"',curDate() )";
 							
 							
 							if(stmt.executeUpdate(sql) > 0) {
